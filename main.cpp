@@ -35,10 +35,15 @@ int main()
 //        std::cout << "row_at:\n" << to_bitboard(std::bitset<64>(row_at(i)).to_string()) << std::endl;
 //    }
 
-    for (int i = 0; i < 64; i++)
-    {
+//    for (int i = 0; i < 64; i++)
+//    {
+//        std::cout << "bitboard:\n" << to_bitboard(std::bitset<64>(exp2(i)).to_string()) << std::endl;
+//        std::cout << "column_at:\n" << to_bitboard(std::bitset<64>(column_at(i)).to_string()) << std::endl;
+//    }
+//    return 0;
+
+    for (int i = 0; i < 64; i++) {
         std::cout << "bitboard:\n" << to_bitboard(std::bitset<64>(exp2(i)).to_string()) << std::endl;
-        std::cout << "column_at:\n" << to_bitboard(std::bitset<64>(column_at(i)).to_string()) << std::endl;
+        std::cout << "gallop_at:\n" << to_bitboard(std::bitset<64>(gallop_at(i)).to_string()) << std::endl;
     }
-    return 0;
 }

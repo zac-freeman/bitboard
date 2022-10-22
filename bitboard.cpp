@@ -3,24 +3,6 @@
 #include <bitset>
 #include <cassert>
 
-static const uint64_t L_DIAG = std::bitset<SIZE>("10000000"
-                                                 "01000000"
-                                                 "00100000"
-                                                 "00010000"
-                                                 "00001000"
-                                                 "00000100"
-                                                 "00000010"
-                                                 "00000001").to_ullong();
-
-static const uint64_t R_DIAG = std::bitset<SIZE>("00000001"
-                                                 "00000010"
-                                                 "00000100"
-                                                 "00001000"
-                                                 "00010000"
-                                                 "00100000"
-                                                 "01000000"
-                                                 "10000000").to_ullong();
-
 static const uint64_t ROW = std::bitset<SIZE>("00000000"
                                               "00000000"
                                               "00000000"
@@ -39,6 +21,33 @@ static const uint64_t COLUMN = std::bitset<SIZE>("00000001"
                                                  "00000001"
                                                  "00000001"
                                                  "00000001").to_ullong();
+
+static const uint64_t L_DIAG = std::bitset<SIZE>("10000000"
+                                                 "01000000"
+                                                 "00100000"
+                                                 "00010000"
+                                                 "00001000"
+                                                 "00000100"
+                                                 "00000010"
+                                                 "00000001").to_ullong();
+
+static const uint64_t R_DIAG = std::bitset<SIZE>("00000001"
+                                                 "00000010"
+                                                 "00000100"
+                                                 "00001000"
+                                                 "00010000"
+                                                 "00100000"
+                                                 "01000000"
+                                                 "10000000").to_ullong();
+
+static const uint64_t GALLOP = std::bitset<SIZE>("00000000"
+                                                 "00000000"
+                                                 "00000000"
+                                                 "00001010"
+                                                 "00010001"
+                                                 "00000000"
+                                                 "00010001"
+                                                 "00001010").to_ullong();
 
 std::string to_bitboard(const std::string &binary)
 {
@@ -64,6 +73,20 @@ std::string from_bitboard(const std::string &bitboard)
     return binary;
 }
 
+uint64_t row_at(size_t index) {
+    assert(index < SIZE);
+
+    int shift = (index / HEIGHT);
+    return ROW << (shift * 8);
+}
+
+uint64_t column_at(size_t index) {
+    assert(index < SIZE);
+
+    int shift = (index % WIDTH);
+    return COLUMN << shift;
+}
+
 uint64_t l_diag_at(size_t index) {
     assert(index < SIZE);
 
@@ -80,16 +103,12 @@ uint64_t r_diag_at(size_t index) {
     return (shift > 0) ? (R_DIAG >> (shift * 8)) : (R_DIAG << (shift * -8));
 }
 
-uint64_t row_at(size_t index) {
+uint64_t gallop_at(const size_t index) {
     assert(index < SIZE);
 
-    int shift = (index / HEIGHT);
-    return ROW << (shift * 8);
-}
+    const int left_wrap = (index % WIDTH) - 5; // TODO
 
-uint64_t column_at(size_t index) {
-    assert(index < SIZE);
-
-    int shift = (index % WIDTH);
-    return COLUMN << shift;
+    const int offset = (2 * WIDTH) + 2;
+    const int shift = offset - index;
+    const int gallop = (shift > 0) ? (GALLOP >> shift) : (GALLOP << (-1 * shift));
 }
